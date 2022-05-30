@@ -8,13 +8,13 @@ import (
 )
 
 type Maze struct {
-	name   string
-	size   int
-	data   [][]bool
-	solver *minisat.Solver
-	vars   []*minisat.Var
-	var2id map[*minisat.Var]int
-	cnf    [][]int
+	name    string
+	size    int
+	data    [][]bool
+	solver  *minisat.Solver
+	varNum  int
+	lineNum int
+	cnf     [][]int
 }
 
 func NewMaze(path string) *Maze {
@@ -47,13 +47,13 @@ func NewMaze(path string) *Maze {
 		}
 	}
 	return &Maze{
-		name:   name,
-		size:   size,
-		data:   data,
-		solver: minisat.NewSolver(0),
-		vars:   make([]*minisat.Var, 0),
-		var2id: make(map[*minisat.Var]int),
-		cnf:    make([][]int, 0),
+		name:    name,
+		size:    size,
+		data:    data,
+		solver:  minisat.NewSolver(0),
+		varNum:  0,
+		lineNum: 0,
+		cnf:     make([][]int, 0),
 	}
 }
 
@@ -77,4 +77,23 @@ func (maze *Maze) OutputCNF(path string) {
 	}
 	defer f.Close()
 	// TODO: write cnf
+}
+
+func (maze *Maze) newVar() *minisat.Var {
+	v := maze.solver.NewVar()
+	maze.varNum++
+	return v
+}
+
+func (maze *Maze) addClause(vars ...*minisat.Var) {
+	maze.solver.AddClause(vars...)
+	maze.cnf = append(maze.cnf, make([]int, len(vars)))
+	for i, v := range vars {
+		lit := int(*v.CVar) + 1
+		if int(*v.CLit)%2 == 1 {
+			lit *= -1
+		}
+		maze.cnf[len(maze.cnf)-1][i] = lit
+	}
+	maze.lineNum++
 }
