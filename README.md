@@ -1,1 +1,5 @@
-# sat-problems
+# SAT-based problems
+
+## 迷宫问题
+
+用 SAT 的方法，求在给定的 n × n 的迷宫中, 求以(1, 1) 为起点，(n, n) 为终点的一条简单路 (不含环).
