@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func main() {
 	//s := minisat.NewSolver(0)
 	//v1 := s.NewVar()
@@ -14,7 +12,10 @@ func main() {
 	//	println(s.ModelValue(v2))
 	//} else {
 	//	println("unsatisfiable")
-	//
-	maze := NewMaze("./cases/maze1.txt")
-	fmt.Println(maze)
+	//}
+	//fmt.Println(v1.CVar)
+	//println(v1.CLit)
+	maze := NewMaze("./cases/maze1")
+	maze.OutputCNF("./out")
+
 }

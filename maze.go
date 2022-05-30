@@ -1,17 +1,24 @@
 package main
 
 import (
+	"github.com/pocke/go-minisat"
 	"os"
 	"strconv"
 	"strings"
 )
 
 type Maze struct {
-	size int
-	data [][]bool
+	name   string
+	size   int
+	data   [][]bool
+	solver *minisat.Solver
+	vars   []*minisat.Var
+	var2id map[*minisat.Var]int
+	cnf    [][]int
 }
 
 func NewMaze(path string) *Maze {
+	name := strings.Split(path, "/")[len(strings.Split(path, "/"))-1]
 	buf, err := os.ReadFile(path)
 	if err != nil {
 		panic(err)
@@ -39,9 +46,35 @@ func NewMaze(path string) *Maze {
 			}
 		}
 	}
-	return &Maze{size, data}
+	return &Maze{
+		name:   name,
+		size:   size,
+		data:   data,
+		solver: minisat.NewSolver(0),
+		vars:   make([]*minisat.Var, 0),
+		var2id: make(map[*minisat.Var]int),
+		cnf:    make([][]int, 0),
+	}
 }
 
-func (maze Maze) Solve() {
+func (maze *Maze) Solve() {
+	// TODO: solve the problem
+}
 
+func (maze *Maze) OutputCNF(path string) {
+	if err := os.Mkdir(path, 0777); err != nil {
+		if !os.IsExist(err) {
+			panic(err)
+		}
+	}
+	if !strings.HasSuffix(path, "/") {
+		path += "/"
+	}
+	path += maze.name + ".cnf"
+	f, err := os.Create(path)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+	// TODO: write cnf
 }
