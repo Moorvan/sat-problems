@@ -81,7 +81,6 @@ func NewMaze(path string) *Maze {
 }
 
 func (maze *Maze) Solve(step int) {
-	//fmt.Println(maze.data)
 	for i := 1; i < step; i++ {
 		log.Println("step", i)
 		maze.setConstraints(i)
