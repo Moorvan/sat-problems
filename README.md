@@ -53,13 +53,13 @@
 
 ### 编译
 
-```go
+```shell
 go build -o mazeSolver
 ```
 
 ### 运行
 
-```go
+```shell
 ./mazeSolver
 ```
 
